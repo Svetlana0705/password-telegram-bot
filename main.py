@@ -1,18 +1,38 @@
-# This is a sample Python script.
+from aiogram import Bot, Dispatcher, executor
+from helper import check_pass
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+API_TOKEN = '5997325539:AAH5xRsm3FVoG1Bbkskv6DHiOA0lcjEfilU'
+
+# Initialize bot and dispatcher
+bot = Bot(token=API_TOKEN)
+dp = Dispatcher(bot)
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+@dp.message_handler(commands=['start', 'help'])
+async def send_welcome(message):
+    await message.reply("Введите пароль")
 
 
-# Press the green button in the gutter to run the script.
+# @dp.message_handler(commands=['hi'])
+# async def hi(message):
+#     await message.answer('1234')
+
+
+# @dp.message_handler()
+# async def echo(message):
+#     if message.text=='2+2':
+#         await message.answer('4')
+#     elif message.text=='3+3':
+#         await message.answer('6')
+#     else:
+#         await message.answer(message.text)
+
+
+@dp.message_handler()
+async def validate_password(message):
+    result=check_pass(message.text)
+    await message.answer(result)
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-    print('Hi,GitHub')
-    print('Hi,summer')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    executor.start_polling(dp, skip_updates=True)
